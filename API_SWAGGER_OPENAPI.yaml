@@ -1,0 +1,165 @@
+openapi: 3.0.3
+info:
+  title: ShopHub Cart Frontend API Contract
+  version: 1.0.0
+  description: Spring Boot REST API contract expected by the Angular cart application.
+servers:
+  - url: http://localhost:8080/api
+paths:
+  /auth/login:
+    post:
+      summary: Login user, seller, or admin
+      responses:
+        "200":
+          description: Auth token and user details
+  /auth/register:
+    post:
+      summary: Register a user or product seller
+      responses:
+        "201":
+          description: Registered account
+  /auth/logout:
+    post:
+      summary: Logout current session
+      responses:
+        "200":
+          description: Logged out
+  /products:
+    get:
+      summary: List products with filters
+      parameters:
+        - in: query
+          name: minPrice
+          schema: { type: number }
+        - in: query
+          name: maxPrice
+          schema: { type: number }
+        - in: query
+          name: sortBy
+          schema: { type: string, enum: [price-low, price-high, newest, rating] }
+        - in: query
+          name: sellerId
+          schema: { type: string }
+        - in: query
+          name: category
+          schema: { type: string }
+      responses:
+        "200":
+          description: Product list
+    post:
+      summary: Seller submits product for admin approval
+      responses:
+        "201":
+          description: Product submitted
+  /products/{id}:
+    get:
+      summary: Product details
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Product
+    put:
+      summary: Update product
+      responses:
+        "200":
+          description: Updated product
+    delete:
+      summary: Remove product
+      responses:
+        "200":
+          description: Removed
+  /products/sellers:
+    get:
+      summary: List product sellers for filters
+      responses:
+        "200":
+          description: Sellers
+  /cart:
+    get:
+      summary: Load saved cart for logged-in user
+      responses:
+        "200":
+          description: Cart
+  /cart/add:
+    post:
+      summary: Add product to cart
+      responses:
+        "201":
+          description: Cart updated
+  /cart/update/{productId}:
+    put:
+      summary: Update product quantity in cart
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Cart updated
+  /cart/{productId}:
+    delete:
+      summary: Remove product from cart
+      responses:
+        "200":
+          description: Cart updated
+  /cart/favorites:
+    get:
+      summary: List favorite products
+      responses:
+        "200":
+          description: Favorites
+    post:
+      summary: Add product to favorites
+      responses:
+        "201":
+          description: Favorite saved
+  /cart/save:
+    post:
+      summary: Persist cart for future login
+      responses:
+        "200":
+          description: Saved cart
+  /payments/initiate:
+    post:
+      summary: Create Stripe session and return payment page URL
+      responses:
+        "200":
+          description: Stripe payment URL
+  /payments/confirm:
+    post:
+      summary: Confirm Stripe session after redirect/webhook
+      responses:
+        "200":
+          description: Payment Confirmation or Payment Failed payload
+  /notifications/whatsapp/send:
+    post:
+      summary: Notify admin after seller or product creation
+      responses:
+        "201":
+          description: WhatsApp notification queued
+  /notifications/admin/approval-request:
+    post:
+      summary: Send product approval request to admin WhatsApp
+      responses:
+        "201":
+          description: Approval request sent
+  /notifications/admin/process-approval:
+    post:
+      summary: Process admin approve or reject action from WhatsApp/UI
+      responses:
+        "200":
+          description: Approval processed
+components:
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        statusCode: { type: integer }
+        message: { type: string }
+        data: { type: object }
+        timestamp: { type: string, format: date-time }
