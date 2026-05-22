@@ -1,0 +1,442 @@
+{
+  "info": {
+    "_postman_id": "8c0d4e1b-cf9a-4b25-9f63-shophub-api",
+    "name": "ShopHub E-Commerce Backend API",
+    "description": "Postman collection for the ShopHub cart website backend. Every visible website action is represented as a request with JSON payloads and example success/error responses.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080/api", "type": "string" },
+    { "key": "token", "value": "", "type": "string" },
+    { "key": "refreshToken", "value": "", "type": "string" },
+    { "key": "userId", "value": "user-001", "type": "string" },
+    { "key": "sellerId", "value": "seller-001", "type": "string" },
+    { "key": "productId", "value": "product-001", "type": "string" },
+    { "key": "cartId", "value": "cart-001", "type": "string" },
+    { "key": "paymentId", "value": "pay-001", "type": "string" },
+    { "key": "sessionId", "value": "cs_test_123", "type": "string" },
+    { "key": "notificationId", "value": "notif-001", "type": "string" }
+    ,
+    { "key": "geoLatitude", "value": "12.9716", "type": "string" },
+    { "key": "geoLongitude", "value": "77.5946", "type": "string" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{token}}", "type": "string" }
+    ]
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "description": "Register, login, refresh token, logout, and profile actions.",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] },
+            "description": "Creates a normal customer account. Website behavior: show success message and ask the user to login manually.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"User@123\",\n  \"name\": \"John Doe\",\n  \"role\": \"user\",\n  \"whatsappNumber\": \"+919876543210\",\n  \"aadhaarId\": \"123412341234\",\n  \"address\": {\n    \"homeOrOfficeNumber\": \"Flat 201\",\n    \"street\": \"MG Road\",\n    \"landmark\": \"Near Metro Station\",\n    \"city\": \"Bengaluru\",\n    \"state\": \"Karnataka\",\n    \"pin\": \"560001\"\n  },\n  \"geoLocation\": {\n    \"latitude\": 12.9716,\n    \"longitude\": 77.5946\n  }\n}"
+            }
+          },
+          "response": [
+            {
+              "name": "201 Created - User Registered",
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"statusCode\": 201,\n  \"message\": \"User registered successfully\",\n  \"data\": {\n    \"user\": {\n      \"id\": \"user-001\",\n      \"email\": \"user@example.com\",\n      \"name\": \"John Doe\",\n      \"role\": \"user\",\n      \"whatsappNumber\": \"+919876543210\",\n      \"createdDate\": \"2026-05-19T10:30:00Z\"\n    },\n    \"token\": \"jwt-token\",\n    \"refreshToken\": \"refresh-token\"\n  },\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}"
+            },
+            {
+              "name": "400 Bad Request - Validation Failed",
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"statusCode\": 400,\n  \"message\": \"Email, password, name and role are required\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}"
+            },
+            {
+              "name": "409 Conflict - Email Exists",
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"statusCode\": 409,\n  \"message\": \"Email is already registered\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Register Product Seller",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] },
+            "description": "Creates a product seller registration request. Website message: You submitted the new registration. Admin will review and approve it, then you can try to login. It will take 24 hrs to approve.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"seller@example.com\",\n  \"password\": \"Seller@123\",\n  \"name\": \"Fresh Home Sellers\",\n  \"role\": \"seller\",\n  \"whatsappNumber\": \"+919876543211\",\n  \"aadhaarId\": \"123412341234\",\n  \"address\": {\n    \"homeOrOfficeNumber\": \"Shop 12\",\n    \"street\": \"Brigade Road\",\n    \"landmark\": \"Near Market Gate\",\n    \"city\": \"Bengaluru\",\n    \"state\": \"Karnataka\",\n    \"pin\": \"560025\"\n  },\n  \"geoLocation\": {\n    \"latitude\": 12.9716,\n    \"longitude\": 77.5946\n  }\n}"
+            }
+          },
+          "response": [
+            {
+              "name": "201 Created - Seller Registration Submitted",
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"statusCode\": 201,\n  \"message\": \"Seller registration submitted. Awaiting admin approval.\",\n  \"data\": {\n    \"user\": {\n      \"id\": \"seller-001\",\n      \"email\": \"seller@example.com\",\n      \"name\": \"Fresh Home Sellers\",\n      \"role\": \"seller\",\n      \"status\": \"pending\",\n      \"whatsappNumber\": \"+919876543211\",\n      \"createdDate\": \"2026-05-19T10:30:00Z\"\n    }\n  },\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}"
+            },
+            {
+              "name": "403 Forbidden - Seller Not Approved Login Attempt",
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"statusCode\": 403,\n  \"message\": \"Seller account is pending admin approval. Please try again after approval.\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  const json = pm.response.json();",
+                  "  pm.collectionVariables.set('token', json.data.token);",
+                  "  pm.collectionVariables.set('refreshToken', json.data.refreshToken);",
+                  "  pm.collectionVariables.set('userId', json.data.user.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] },
+            "description": "Login as user, approved seller, or admin. On 200, this request saves token and refreshToken into collection variables.",
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"User@123\"\n}" }
+          },
+          "response": [
+            {
+              "name": "200 OK - Login Successful",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"statusCode\": 200,\n  \"message\": \"Login successful\",\n  \"data\": {\n    \"user\": {\n      \"id\": \"user-001\",\n      \"email\": \"user@example.com\",\n      \"name\": \"John Doe\",\n      \"role\": \"user\"\n    },\n    \"token\": \"jwt-token\",\n    \"refreshToken\": \"refresh-token\"\n  },\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}"
+            },
+            {
+              "name": "401 Unauthorized - Invalid Credentials",
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"statusCode\": 401,\n  \"message\": \"Invalid email or password\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}"
+            },
+            {
+              "name": "403 Forbidden - Seller Pending Approval",
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"statusCode\": 403,\n  \"message\": \"Seller account is pending admin approval\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Validate Aadhaar",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/auth/aadhaar/validate", "host": ["{{baseUrl}}"], "path": ["auth", "aadhaar", "validate"] },
+            "description": "Optional Aadhaar validation hook. Backend should connect this action to the approved government Aadhaar validation provider/API.",
+            "body": { "mode": "raw", "raw": "{\n  \"aadhaarId\": \"123412341234\"\n}" }
+          },
+          "response": [
+            {
+              "name": "200 OK - Aadhaar Validated",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"statusCode\": 200,\n  \"message\": \"Aadhaar validated successfully\",\n  \"data\": {\n    \"aadhaarId\": \"123412341234\",\n    \"valid\": true,\n    \"provider\": \"govt-portal\"\n  },\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}"
+            },
+            {
+              "name": "400 Bad Request - Invalid Aadhaar",
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"statusCode\": 400,\n  \"message\": \"Aadhaar must be 12 digits\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}"
+            },
+            {
+              "name": "502 Bad Gateway - Government Provider Unavailable",
+              "status": "Bad Gateway",
+              "code": 502,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"statusCode\": 502,\n  \"message\": \"Government Aadhaar validation provider is unavailable\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/auth/refresh", "host": ["{{baseUrl}}"], "path": ["auth", "refresh"] },
+            "body": { "mode": "raw", "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}" }
+          },
+          "response": [
+            { "name": "200 OK - Token Refreshed", "status": "OK", "code": 200, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 200,\n  \"message\": \"Token refreshed successfully\",\n  \"data\": { \"token\": \"new-jwt-token\" },\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" },
+            { "name": "401 Unauthorized - Refresh Token Expired", "status": "Unauthorized", "code": 401, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 401,\n  \"message\": \"Refresh token is invalid or expired\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }
+          ]
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "url": { "raw": "{{baseUrl}}/auth/logout", "host": ["{{baseUrl}}"], "path": ["auth", "logout"] }
+          },
+          "response": [
+            { "name": "200 OK - Logout Successful", "status": "OK", "code": 200, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 200,\n  \"message\": \"Logout successful\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" },
+            { "name": "401 Unauthorized - Missing Token", "status": "Unauthorized", "code": 401, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 401,\n  \"message\": \"Missing or invalid authentication token\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }
+          ]
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/auth/profile", "host": ["{{baseUrl}}"], "path": ["auth", "profile"] },
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Jane Doe\",\n  \"whatsappNumber\": \"+919876543211\"\n}" }
+          },
+          "response": [
+            { "name": "200 OK - Profile Updated", "status": "OK", "code": 200, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 200,\n  \"message\": \"Profile updated successfully\",\n  \"data\": { \"user\": { \"id\": \"{{userId}}\", \"name\": \"Jane Doe\" } },\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" },
+            { "name": "400 Bad Request - Invalid Phone", "status": "Bad Request", "code": 400, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 400,\n  \"message\": \"Invalid WhatsApp number format\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "description": "Browse products, seller product ownership, and admin approval-facing product actions.",
+      "item": [
+        {
+          "name": "List Products",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/products?minPrice=100&maxPrice=5000&sortBy=newest&sellerId={{sellerId}}&category=Electronics&page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"],
+              "query": [
+                { "key": "minPrice", "value": "100" },
+                { "key": "maxPrice", "value": "5000" },
+                { "key": "sortBy", "value": "newest" },
+                { "key": "sellerId", "value": "{{sellerId}}" },
+                { "key": "category", "value": "Electronics" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            }
+          },
+          "response": [
+            { "name": "200 OK - Products Retrieved", "status": "OK", "code": 200, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 200,\n  \"message\": \"Products retrieved successfully\",\n  \"data\": [\n    {\n      \"id\": \"product-001\",\n      \"name\": \"Wireless Keyboard\",\n      \"description\": \"Compact Bluetooth keyboard\",\n      \"price\": 2499,\n      \"category\": \"Electronics\",\n      \"image\": \"https://example.com/keyboard.jpg\",\n      \"sellerName\": \"Tech Basket\",\n      \"sellerId\": \"seller-001\",\n      \"rating\": 4.5,\n      \"reviews\": 120,\n      \"stock\": 50,\n      \"status\": \"approved\",\n      \"createdDate\": \"2026-05-19T10:30:00Z\"\n    }\n  ],\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" },
+            { "name": "400 Bad Request - Invalid Filter", "status": "Bad Request", "code": 400, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 400,\n  \"message\": \"minPrice cannot be greater than maxPrice\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }
+          ]
+        },
+        {
+          "name": "Search Products",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/products/search?q=keyboard", "host": ["{{baseUrl}}"], "path": ["products", "search"], "query": [{ "key": "q", "value": "keyboard" }] }
+          },
+          "response": [
+            { "name": "200 OK - Search Results", "status": "OK", "code": 200, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 200,\n  \"message\": \"Products retrieved successfully\",\n  \"data\": [],\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" },
+            { "name": "400 Bad Request - Missing Query", "status": "Bad Request", "code": 400, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 400,\n  \"message\": \"Search query q is required\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }
+          ]
+        },
+        {
+          "name": "Get Product Details",
+          "request": { "auth": { "type": "noauth" }, "method": "GET", "url": { "raw": "{{baseUrl}}/products/{{productId}}", "host": ["{{baseUrl}}"], "path": ["products", "{{productId}}"] } },
+          "response": [
+            { "name": "200 OK - Product Retrieved", "status": "OK", "code": 200, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 200,\n  \"message\": \"Product retrieved successfully\",\n  \"data\": { \"id\": \"{{productId}}\", \"name\": \"Wireless Keyboard\" },\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" },
+            { "name": "404 Not Found - Product Missing", "status": "Not Found", "code": 404, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 404,\n  \"message\": \"Product not found\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }
+          ]
+        },
+        {
+          "name": "Seller Adds Product For Admin Approval",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/products", "host": ["{{baseUrl}}"], "path": ["products"] },
+            "description": "Website message after product seller submits: Admin will approve the Product. It will take 24 hrs, you have to wait till then.",
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"New Product\",\n  \"description\": \"Product description\",\n  \"price\": 999.99,\n  \"category\": \"Electronics\",\n  \"image\": \"https://example.com/product.jpg\",\n  \"stock\": 100\n}" }
+          },
+          "response": [
+            { "name": "201 Created - Product Pending Approval", "status": "Created", "code": 201, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 201,\n  \"message\": \"Product added successfully. Awaiting admin approval.\",\n  \"data\": {\n    \"id\": \"product-002\",\n    \"name\": \"New Product\",\n    \"sellerId\": \"{{sellerId}}\",\n    \"status\": \"pending\"\n  },\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" },
+            { "name": "401 Unauthorized - Seller Not Logged In", "status": "Unauthorized", "code": 401, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 401,\n  \"message\": \"Missing or invalid authentication token\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" },
+            { "name": "403 Forbidden - Seller Not Approved", "status": "Forbidden", "code": 403, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 403,\n  \"message\": \"Seller account must be approved before adding products\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }
+          ]
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/products/{{productId}}", "host": ["{{baseUrl}}"], "path": ["products", "{{productId}}"] },
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Updated Product\",\n  \"price\": 899.99,\n  \"stock\": 75\n}" }
+          },
+          "response": [
+            { "name": "200 OK - Product Updated", "status": "OK", "code": 200, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 200,\n  \"message\": \"Product updated successfully\",\n  \"data\": { \"id\": \"{{productId}}\", \"name\": \"Updated Product\" },\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" },
+            { "name": "403 Forbidden - Not Product Owner", "status": "Forbidden", "code": 403, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 403,\n  \"message\": \"Only the product owner or admin can update this product\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }
+          ]
+        },
+        {
+          "name": "Delete Product",
+          "request": { "method": "DELETE", "url": { "raw": "{{baseUrl}}/products/{{productId}}", "host": ["{{baseUrl}}"], "path": ["products", "{{productId}}"] } },
+          "response": [
+            { "name": "200 OK - Product Deleted", "status": "OK", "code": 200, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 200,\n  \"message\": \"Product deleted successfully\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" },
+            { "name": "404 Not Found - Product Missing", "status": "Not Found", "code": 404, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 404,\n  \"message\": \"Product not found\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }
+          ]
+        },
+        {
+          "name": "List Product Sellers",
+          "request": { "auth": { "type": "noauth" }, "method": "GET", "url": { "raw": "{{baseUrl}}/products/sellers", "host": ["{{baseUrl}}"], "path": ["products", "sellers"] } },
+          "response": [
+            { "name": "200 OK - Sellers Retrieved", "status": "OK", "code": 200, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 200,\n  \"message\": \"Sellers retrieved successfully\",\n  \"data\": [\n    { \"id\": \"seller-001\", \"name\": \"Tech Basket\" }\n  ],\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Cart",
+      "item": [
+        { "name": "Get Cart", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/cart", "host": ["{{baseUrl}}"], "path": ["cart"] } }, "response": [{ "name": "200 OK - Cart Retrieved", "status": "OK", "code": 200, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 200,\n  \"message\": \"Cart retrieved successfully\",\n  \"data\": {\n    \"id\": \"{{cartId}}\",\n    \"userId\": \"{{userId}}\",\n    \"items\": [],\n    \"totalPrice\": 0,\n    \"lastUpdated\": \"2026-05-19T10:30:00Z\"\n  },\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }, { "name": "401 Unauthorized", "status": "Unauthorized", "code": 401, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 401,\n  \"message\": \"Login is required to access cart\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }] },
+        { "name": "Add Product To Cart", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{baseUrl}}/cart/add", "host": ["{{baseUrl}}"], "path": ["cart", "add"] }, "body": { "mode": "raw", "raw": "{\n  \"productId\": \"{{productId}}\",\n  \"quantity\": 2\n}" } }, "response": [{ "name": "201 Created - Cart Updated", "status": "Created", "code": 201, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 201,\n  \"message\": \"Product added to cart\",\n  \"data\": { \"id\": \"{{cartId}}\", \"items\": [{ \"productId\": \"{{productId}}\", \"quantity\": 2 }] },\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }, { "name": "400 Bad Request - Invalid Quantity", "status": "Bad Request", "code": 400, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 400,\n  \"message\": \"Quantity must be greater than zero\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }] },
+        { "name": "Update Cart Quantity", "request": { "method": "PUT", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{baseUrl}}/cart/update/{{productId}}", "host": ["{{baseUrl}}"], "path": ["cart", "update", "{{productId}}"] }, "body": { "mode": "raw", "raw": "{\n  \"quantity\": 3\n}" } }, "response": [{ "name": "200 OK - Cart Quantity Updated", "status": "OK", "code": 200, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 200,\n  \"message\": \"Cart updated successfully\",\n  \"data\": { \"id\": \"{{cartId}}\" },\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }, { "name": "404 Not Found - Product Not In Cart", "status": "Not Found", "code": 404, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 404,\n  \"message\": \"Product is not in cart\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }] },
+        { "name": "Remove Product From Cart", "request": { "method": "DELETE", "url": { "raw": "{{baseUrl}}/cart/{{productId}}", "host": ["{{baseUrl}}"], "path": ["cart", "{{productId}}"] } }, "response": [{ "name": "200 OK - Product Removed", "status": "OK", "code": 200, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 200,\n  \"message\": \"Product removed from cart\",\n  \"data\": { \"id\": \"{{cartId}}\" },\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }] },
+        { "name": "Clear Cart", "request": { "method": "DELETE", "url": { "raw": "{{baseUrl}}/cart/clear", "host": ["{{baseUrl}}"], "path": ["cart", "clear"] } }, "response": [{ "name": "200 OK - Cart Cleared", "status": "OK", "code": 200, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 200,\n  \"message\": \"Cart cleared successfully\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }] },
+        { "name": "Save Cart For Later", "request": { "method": "POST", "url": { "raw": "{{baseUrl}}/cart/save", "host": ["{{baseUrl}}"], "path": ["cart", "save"] } }, "response": [{ "name": "200 OK - Cart Saved", "status": "OK", "code": 200, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 200,\n  \"message\": \"Cart saved successfully\",\n  \"data\": { \"id\": \"{{cartId}}\" },\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }] },
+        { "name": "Add Product To Favorites", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{baseUrl}}/cart/favorites", "host": ["{{baseUrl}}"], "path": ["cart", "favorites"] }, "body": { "mode": "raw", "raw": "{\n  \"productId\": \"{{productId}}\"\n}" } }, "response": [{ "name": "201 Created - Favorite Added", "status": "Created", "code": 201, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 201,\n  \"message\": \"Added to favorites\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }] },
+        { "name": "Remove Product From Favorites", "request": { "method": "DELETE", "url": { "raw": "{{baseUrl}}/cart/favorites/{{productId}}", "host": ["{{baseUrl}}"], "path": ["cart", "favorites", "{{productId}}"] } }, "response": [{ "name": "200 OK - Favorite Removed", "status": "OK", "code": 200, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 200,\n  \"message\": \"Removed from favorites\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }] },
+        { "name": "Get Favorites", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/cart/favorites", "host": ["{{baseUrl}}"], "path": ["cart", "favorites"] } }, "response": [{ "name": "200 OK - Favorites Retrieved", "status": "OK", "code": 200, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 200,\n  \"message\": \"Favorites retrieved successfully\",\n  \"data\": [],\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }] }
+      ]
+    },
+    {
+      "name": "Payments",
+      "item": [
+        { "name": "Initiate Payment", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{baseUrl}}/payments/initiate", "host": ["{{baseUrl}}"], "path": ["payments", "initiate"] }, "body": { "mode": "raw", "raw": "{\n  \"cartId\": \"{{cartId}}\",\n  \"amount\": 1999.98,\n  \"currency\": \"INR\",\n  \"email\": \"user@example.com\"\n}" } }, "response": [{ "name": "201 Created - Payment Session", "status": "Created", "code": 201, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 201,\n  \"message\": \"Payment session created successfully\",\n  \"data\": {\n    \"sessionId\": \"{{sessionId}}\",\n    \"paymentUrl\": \"https://checkout.stripe.com/pay/cs_test_123\"\n  },\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }, { "name": "400 Bad Request - Invalid Amount", "status": "Bad Request", "code": 400, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 400,\n  \"message\": \"Payment amount must be greater than zero\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }] },
+        { "name": "Confirm Payment", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{baseUrl}}/payments/confirm", "host": ["{{baseUrl}}"], "path": ["payments", "confirm"] }, "body": { "mode": "raw", "raw": "{\n  \"sessionId\": \"{{sessionId}}\"\n}" } }, "response": [{ "name": "200 OK - Payment Successful", "status": "OK", "code": 200, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 200,\n  \"message\": \"Payment successful\",\n  \"data\": {\n    \"paymentId\": \"{{paymentId}}\",\n    \"status\": \"success\",\n    \"orderId\": \"order-001\",\n    \"amount\": 1999.98,\n    \"transactionId\": \"txn_1234567890\"\n  },\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }, { "name": "400 Bad Request - Invalid Session", "status": "Bad Request", "code": 400, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 400,\n  \"message\": \"Payment session is invalid or expired\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }] },
+        { "name": "Get Payment Status", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/payments/status/{{paymentId}}", "host": ["{{baseUrl}}"], "path": ["payments", "status", "{{paymentId}}"] } }, "response": [{ "name": "200 OK - Payment Status", "status": "OK", "code": 200, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 200,\n  \"message\": \"Payment status retrieved\",\n  \"data\": { \"paymentId\": \"{{paymentId}}\", \"status\": \"success\" },\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }, { "name": "404 Not Found - Payment Missing", "status": "Not Found", "code": 404, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 404,\n  \"message\": \"Payment not found\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }] },
+        { "name": "Cancel Payment", "request": { "method": "POST", "url": { "raw": "{{baseUrl}}/payments/cancel/{{paymentId}}", "host": ["{{baseUrl}}"], "path": ["payments", "cancel", "{{paymentId}}"] } }, "response": [{ "name": "200 OK - Payment Cancelled", "status": "OK", "code": 200, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 200,\n  \"message\": \"Payment cancelled successfully\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }, { "name": "409 Conflict - Already Captured", "status": "Conflict", "code": 409, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 409,\n  \"message\": \"Payment cannot be cancelled after capture\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }] },
+        { "name": "Payment History", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/payments/history", "host": ["{{baseUrl}}"], "path": ["payments", "history"] } }, "response": [{ "name": "200 OK - Payment History", "status": "OK", "code": 200, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 200,\n  \"message\": \"Payment history retrieved\",\n  \"data\": [],\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }] }
+      ]
+    },
+    {
+      "name": "Notifications And Admin Approval Actions",
+      "item": [
+        { "name": "Send WhatsApp Notification", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{baseUrl}}/notifications/whatsapp/send", "host": ["{{baseUrl}}"], "path": ["notifications", "whatsapp", "send"] }, "body": { "mode": "raw", "raw": "{\n  \"recipientNumber\": \"+919876543210\",\n  \"type\": \"product_added\",\n  \"productId\": \"{{productId}}\",\n  \"productName\": \"New Product\",\n  \"sellerName\": \"Seller Name\"\n}" } }, "response": [{ "name": "201 Created - Notification Sent", "status": "Created", "code": 201, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 201,\n  \"message\": \"Notification sent successfully\",\n  \"data\": {\n    \"id\": \"{{notificationId}}\",\n    \"recipientNumber\": \"+919876543210\",\n    \"type\": \"product_added\",\n    \"status\": \"sent\"\n  },\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }, { "name": "500 Server Error - WhatsApp Provider Failed", "status": "Internal Server Error", "code": 500, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 500,\n  \"message\": \"WhatsApp provider failed to send notification\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }] },
+        { "name": "Send Product Approval Request To Admin", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{baseUrl}}/notifications/admin/approval-request", "host": ["{{baseUrl}}"], "path": ["notifications", "admin", "approval-request"] }, "body": { "mode": "raw", "raw": "{\n  \"productId\": \"{{productId}}\",\n  \"productName\": \"New Product\",\n  \"sellerName\": \"Seller Name\"\n}" } }, "response": [{ "name": "201 Created - Approval Request Sent", "status": "Created", "code": 201, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 201,\n  \"message\": \"Approval request sent to admin\",\n  \"data\": { \"id\": \"{{notificationId}}\", \"status\": \"queued\" },\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }] },
+        { "name": "Admin Approves Product", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{baseUrl}}/notifications/admin/process-approval", "host": ["{{baseUrl}}"], "path": ["notifications", "admin", "process-approval"] }, "body": { "mode": "raw", "raw": "{\n  \"notificationId\": \"{{notificationId}}\",\n  \"targetType\": \"product\",\n  \"targetId\": \"{{productId}}\",\n  \"action\": \"approve\",\n  \"reason\": \"Product meets quality standards\"\n}" } }, "response": [{ "name": "200 OK - Product Approved", "status": "OK", "code": 200, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 200,\n  \"message\": \"Approval processed successfully\",\n  \"data\": { \"targetType\": \"product\", \"targetId\": \"{{productId}}\", \"status\": \"approved\" },\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }, { "name": "403 Forbidden - Admin Role Required", "status": "Forbidden", "code": 403, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 403,\n  \"message\": \"Admin role is required for approval actions\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }] },
+        { "name": "Admin Rejects Product", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{baseUrl}}/notifications/admin/process-approval", "host": ["{{baseUrl}}"], "path": ["notifications", "admin", "process-approval"] }, "body": { "mode": "raw", "raw": "{\n  \"notificationId\": \"{{notificationId}}\",\n  \"targetType\": \"product\",\n  \"targetId\": \"{{productId}}\",\n  \"action\": \"reject\",\n  \"reason\": \"Product information is incomplete\"\n}" } }, "response": [{ "name": "200 OK - Product Rejected", "status": "OK", "code": 200, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 200,\n  \"message\": \"Approval processed successfully\",\n  \"data\": { \"targetType\": \"product\", \"targetId\": \"{{productId}}\", \"status\": \"rejected\" },\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }] },
+        { "name": "Admin Approves Product Seller Registration", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{baseUrl}}/notifications/admin/process-approval", "host": ["{{baseUrl}}"], "path": ["notifications", "admin", "process-approval"] }, "body": { "mode": "raw", "raw": "{\n  \"notificationId\": \"{{notificationId}}\",\n  \"targetType\": \"seller\",\n  \"targetId\": \"{{sellerId}}\",\n  \"action\": \"approve\",\n  \"reason\": \"Seller documents verified\"\n}" } }, "response": [{ "name": "200 OK - Seller Approved", "status": "OK", "code": 200, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 200,\n  \"message\": \"Approval processed successfully\",\n  \"data\": { \"targetType\": \"seller\", \"targetId\": \"{{sellerId}}\", \"status\": \"active\" },\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }] },
+        { "name": "Admin Rejects Product Seller Registration", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": { "raw": "{{baseUrl}}/notifications/admin/process-approval", "host": ["{{baseUrl}}"], "path": ["notifications", "admin", "process-approval"] }, "body": { "mode": "raw", "raw": "{\n  \"notificationId\": \"{{notificationId}}\",\n  \"targetType\": \"seller\",\n  \"targetId\": \"{{sellerId}}\",\n  \"action\": \"reject\",\n  \"reason\": \"Seller details could not be verified\"\n}" } }, "response": [{ "name": "200 OK - Seller Rejected", "status": "OK", "code": 200, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 200,\n  \"message\": \"Approval processed successfully\",\n  \"data\": { \"targetType\": \"seller\", \"targetId\": \"{{sellerId}}\", \"status\": \"rejected\" },\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }] },
+        { "name": "Notification History", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/notifications/whatsapp/history?limit=50", "host": ["{{baseUrl}}"], "path": ["notifications", "whatsapp", "history"], "query": [{ "key": "limit", "value": "50" }] } }, "response": [{ "name": "200 OK - Notification History", "status": "OK", "code": 200, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 200,\n  \"message\": \"Notification history retrieved\",\n  \"data\": [],\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }] },
+        { "name": "Pending Admin Approvals", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/notifications/admin/pending-approvals", "host": ["{{baseUrl}}"], "path": ["notifications", "admin", "pending-approvals"] } }, "response": [{ "name": "200 OK - Pending Approvals", "status": "OK", "code": 200, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 200,\n  \"message\": \"Pending approvals retrieved\",\n  \"data\": [\n    { \"notificationId\": \"{{notificationId}}\", \"targetType\": \"product\", \"targetId\": \"{{productId}}\", \"status\": \"pending\" }\n  ],\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }] },
+        { "name": "Mark Notification As Read", "request": { "method": "PUT", "url": { "raw": "{{baseUrl}}/notifications/whatsapp/{{notificationId}}/read", "host": ["{{baseUrl}}"], "path": ["notifications", "whatsapp", "{{notificationId}}", "read"] } }, "response": [{ "name": "200 OK - Notification Read", "status": "OK", "code": 200, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 200,\n  \"message\": \"Notification marked as read\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }, { "name": "404 Not Found - Notification Missing", "status": "Not Found", "code": 404, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 404,\n  \"message\": \"Notification not found\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }] }
+      ]
+    },
+    {
+      "name": "Frontend GeoMap Calls",
+      "description": "Frontend-only map calls used by the registration page. These are not backend endpoints; they document the browser map/address lookup actions.",
+      "item": [
+        {
+          "name": "Reverse Geocode Selected Map Point",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": {
+              "raw": "https://nominatim.openstreetmap.org/reverse?format=jsonv2&addressdetails=1&lat={{geoLatitude}}&lon={{geoLongitude}}",
+              "protocol": "https",
+              "host": ["nominatim", "openstreetmap", "org"],
+              "path": ["reverse"],
+              "query": [
+                { "key": "format", "value": "jsonv2" },
+                { "key": "addressdetails", "value": "1" },
+                { "key": "lat", "value": "{{geoLatitude}}" },
+                { "key": "lon", "value": "{{geoLongitude}}" }
+              ]
+            },
+            "description": "Used after the user clicks/drags the mini map marker. Response is mapped into Home/Office, Street, Nearby/Landmark, City, State, and Pin fields."
+          },
+          "response": [
+            {
+              "name": "200 OK - Address Details Returned",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"place_id\": 123456,\n  \"lat\": \"12.9716\",\n  \"lon\": \"77.5946\",\n  \"display_name\": \"MG Road, Bengaluru, Karnataka, 560001, India\",\n  \"address\": {\n    \"house_number\": \"201\",\n    \"road\": \"MG Road\",\n    \"suburb\": \"Central Bengaluru\",\n    \"city\": \"Bengaluru\",\n    \"state\": \"Karnataka\",\n    \"postcode\": \"560001\",\n    \"country\": \"India\"\n  }\n}"
+            },
+            {
+              "name": "429 Too Many Requests - Map Provider Rate Limit",
+              "status": "Too Many Requests",
+              "code": 429,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"error\": \"Rate limit exceeded. Please retry later.\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Approximate IP Location Fallback",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": {
+              "raw": "https://ipapi.co/json/",
+              "protocol": "https",
+              "host": ["ipapi", "co"],
+              "path": ["json", ""]
+            },
+            "description": "Used only when browser GPS/GeoMap coordinates are unavailable. This gives approximate city/state/pin and should be verified by the user."
+          },
+          "response": [
+            {
+              "name": "200 OK - Approximate Location",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"ip\": \"203.0.113.10\",\n  \"city\": \"Bengaluru\",\n  \"region\": \"Karnataka\",\n  \"postal\": \"560001\",\n  \"latitude\": 12.9716,\n  \"longitude\": 77.5946,\n  \"country_name\": \"India\"\n}"
+            },
+            {
+              "name": "429 Too Many Requests - IP Provider Rate Limit",
+              "status": "Too Many Requests",
+              "code": 429,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"error\": true,\n  \"reason\": \"Rate limited\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Common Error Response Examples",
+      "description": "Reference examples for errors that can be returned by any protected or validated endpoint.",
+      "item": [
+        { "name": "400 Bad Request", "request": { "method": "GET", "url": "{{baseUrl}}/error-examples/400" }, "response": [{ "name": "400 Bad Request", "status": "Bad Request", "code": 400, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 400,\n  \"message\": \"Invalid request parameters\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }] },
+        { "name": "401 Unauthorized", "request": { "method": "GET", "url": "{{baseUrl}}/error-examples/401" }, "response": [{ "name": "401 Unauthorized", "status": "Unauthorized", "code": 401, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 401,\n  \"message\": \"Missing or invalid authentication token\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }] },
+        { "name": "403 Forbidden", "request": { "method": "GET", "url": "{{baseUrl}}/error-examples/403" }, "response": [{ "name": "403 Forbidden", "status": "Forbidden", "code": 403, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 403,\n  \"message\": \"User does not have permission for this action\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }] },
+        { "name": "404 Not Found", "request": { "method": "GET", "url": "{{baseUrl}}/error-examples/404" }, "response": [{ "name": "404 Not Found", "status": "Not Found", "code": 404, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 404,\n  \"message\": \"Resource not found\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }] },
+        { "name": "409 Conflict", "request": { "method": "GET", "url": "{{baseUrl}}/error-examples/409" }, "response": [{ "name": "409 Conflict", "status": "Conflict", "code": 409, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 409,\n  \"message\": \"Resource already exists or cannot be changed in its current state\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }] },
+        { "name": "500 Server Error", "request": { "method": "GET", "url": "{{baseUrl}}/error-examples/500" }, "response": [{ "name": "500 Server Error", "status": "Internal Server Error", "code": 500, "_postman_previewlanguage": "json", "body": "{\n  \"statusCode\": 500,\n  \"message\": \"Internal server error\",\n  \"timestamp\": \"2026-05-19T10:30:00Z\"\n}" }] }
+      ]
+    }
+  ]
+}

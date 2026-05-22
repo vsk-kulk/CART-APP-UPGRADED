@@ -1,0 +1,33 @@
+{
+  "admins": [
+    { "id": "admin-1", "name": "Admin Lead", "email": "admin@shophub.test", "password": "Admin@123", "role": "admin", "whatsappNumber": "+919900001001" }
+  ],
+  "users": [
+    { "id": "user-1", "name": "Anika Rao", "email": "user1@shophub.test", "password": "User@123", "role": "user", "whatsappNumber": "+919900001011" },
+    { "id": "user-2", "name": "Rahul Menon", "email": "user2@shophub.test", "password": "User@123", "role": "user", "whatsappNumber": "+919900001012" },
+    { "id": "user-3", "name": "Meera Shah", "email": "user3@shophub.test", "password": "User@123", "role": "user", "whatsappNumber": "+919900001013" },
+    { "id": "user-4", "name": "Kabir Iyer", "email": "user4@shophub.test", "password": "User@123", "role": "user", "whatsappNumber": "+919900001014" },
+    { "id": "user-5", "name": "Nisha Patel", "email": "user5@shophub.test", "password": "User@123", "role": "user", "whatsappNumber": "+919900001015" }
+  ],
+  "sellers": [
+    { "id": "seller-1", "name": "Urban Cart Co", "email": "seller1@shophub.test", "password": "Seller@123", "role": "seller", "status": "active" },
+    { "id": "seller-2", "name": "Fresh Home Sellers", "email": "seller2@shophub.test", "password": "Seller@123", "role": "seller", "status": "active" },
+    { "id": "seller-3", "name": "Tech Basket", "email": "seller3@shophub.test", "password": "Seller@123", "role": "seller", "status": "pending" },
+    { "id": "seller-4", "name": "Style Yard", "email": "seller4@shophub.test", "password": "Seller@123", "role": "seller", "status": "pending" },
+    { "id": "seller-5", "name": "Kitchen Craft", "email": "seller5@shophub.test", "password": "Seller@123", "role": "seller", "status": "active" }
+  ],
+  "products": [
+    { "id": "prod-1", "name": "Wireless Keyboard", "price": 2499, "category": "Electronics", "sellerId": "seller-3", "sellerName": "Tech Basket", "status": "approved" },
+    { "id": "prod-2", "name": "Cotton Shirt", "price": 1299, "category": "Fashion", "sellerId": "seller-4", "sellerName": "Style Yard", "status": "approved" },
+    { "id": "prod-3", "name": "Ceramic Dinner Set", "price": 1899, "category": "Home", "sellerId": "seller-2", "sellerName": "Fresh Home Sellers", "status": "approved" },
+    { "id": "prod-4", "name": "Running Shoes", "price": 3499, "category": "Sports", "sellerId": "seller-1", "sellerName": "Urban Cart Co", "status": "approved" },
+    { "id": "prod-5", "name": "Smart Watch", "price": 5999, "category": "Electronics", "sellerId": "seller-3", "sellerName": "Tech Basket", "status": "approved" },
+    { "id": "prod-6", "name": "Desk Lamp", "price": 999, "category": "Home", "sellerId": "seller-2", "sellerName": "Fresh Home Sellers", "status": "approved" },
+    { "id": "prod-7", "name": "Travel Backpack", "price": 2199, "category": "Travel", "sellerId": "seller-1", "sellerName": "Urban Cart Co", "status": "approved" },
+    { "id": "prod-8", "name": "Yoga Mat", "price": 799, "category": "Sports", "sellerId": "seller-1", "sellerName": "Urban Cart Co", "status": "approved" },
+    { "id": "prod-9", "name": "Denim Jacket", "price": 2799, "category": "Fashion", "sellerId": "seller-4", "sellerName": "Style Yard", "status": "pending" },
+    { "id": "prod-10", "name": "Coffee Maker", "price": 3199, "category": "Kitchen", "sellerId": "seller-2", "sellerName": "Fresh Home Sellers", "status": "approved" },
+    { "id": "prod-11", "name": "Bluetooth Speaker", "price": 1799, "category": "Electronics", "sellerId": "seller-3", "sellerName": "Tech Basket", "status": "approved" },
+    { "id": "prod-12", "name": "Steel Bottle", "price": 699, "category": "Travel", "sellerId": "seller-1", "sellerName": "Urban Cart Co", "status": "approved" }
+  ]
+}

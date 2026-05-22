@@ -1,0 +1,111 @@
+<section class="register-page">
+  <div class="register-panel">
+    <div class="register-content">
+      <div class="register-form-panel">
+        <h1>{{ role === 'seller' ? 'Product Seller Form' : 'New User Form' }}</h1>
+        <p *ngIf="role === 'seller'">Seller registration sends a WhatsApp approval notification to admin.</p>
+        <p *ngIf="role === 'user'">Create a user account to save cart items, favorites, and continue purchase later.</p>
+
+        <div class="role-tabs">
+          <button [class.active]="role === 'user'" (click)="role = 'user'">User</button>
+          <button [class.active]="role === 'seller'" (click)="role = 'seller'">Product Seller</button>
+        </div>
+
+        <form (ngSubmit)="register()" class="register-form">
+          <label>
+            {{ role === 'seller' ? 'Contact name' : 'Name' }}
+            <input [(ngModel)]="name" name="name" required />
+          </label>
+          <label *ngIf="role === 'seller'">
+            Business name
+            <input [(ngModel)]="businessName" name="businessName" required />
+          </label>
+          <label>
+            Email
+            <input type="email" [(ngModel)]="email" name="email" required />
+          </label>
+          <label>
+            WhatsApp number
+            <input [(ngModel)]="whatsappNumber" name="whatsappNumber" placeholder="+919900001234" />
+          </label>
+          <div class="address-section">
+            <div class="section-heading">
+              <h2>Address</h2>
+              <button type="button" class="btn btn-outline" (click)="useGeoMapLocation()" [disabled]="locationLoading">
+                {{ locationLoading ? 'Finding location...' : 'Use my location' }}
+              </button>
+            </div>
+            <div class="location-note" *ngIf="geoLocation">
+              Selected location: {{ geoLocation.latitude | number: '1.4-4' }}, {{ geoLocation.longitude | number: '1.4-4' }}
+              <span *ngIf="locationAccuracy"> | Accuracy: about {{ locationAccuracy | number: '1.0-0' }} meters</span>
+            </div>
+            <label>
+              Home/Office number
+              <input [(ngModel)]="address.homeOrOfficeNumber" name="homeOrOfficeNumber" />
+            </label>
+            <label>
+              Street
+              <input [(ngModel)]="address.street" name="street" />
+            </label>
+            <label>
+              Nearby/Landmark
+              <input [(ngModel)]="address.landmark" name="landmark" required />
+            </label>
+            <label>
+              City
+              <input [(ngModel)]="address.city" name="city" required />
+            </label>
+            <label>
+              State
+              <input [(ngModel)]="address.state" name="state" required />
+            </label>
+            <label>
+              Pin
+              <input [(ngModel)]="address.pin" name="pin" inputmode="numeric" required />
+            </label>
+          </div>
+          <div class="aadhaar-section">
+            <label>
+              Aadhaar ID
+              <input [(ngModel)]="aadhaarId" name="aadhaarId" inputmode="numeric" maxlength="14" placeholder="Optional 12 digit Aadhaar ID" />
+            </label>
+            <button type="button" class="btn btn-outline" (click)="validateAadhaar()">Validate Aadhaar</button>
+            <p
+              class="inline-message"
+              [class.success]="aadhaarMessageType === 'success'"
+              [class.error]="aadhaarMessageType === 'error'"
+              *ngIf="aadhaarMessage"
+            >
+              {{ aadhaarMessage }}
+            </p>
+          </div>
+          <label>
+            Password
+            <input type="password" [(ngModel)]="password" name="password" required />
+          </label>
+          <button class="btn btn-primary" [disabled]="loading">
+            {{ loading ? 'Submitting...' : 'Submit' }}
+          </button>
+        </form>
+
+        <p class="form-message" [class.success]="messageType === 'success'" [class.error]="messageType === 'error'" *ngIf="message">
+          {{ message }}
+        </p>
+        <a routerLink="/login">Back to login</a>
+      </div>
+
+      <aside class="map-panel">
+        <div class="map-header">
+          <h2>GeoMap</h2>
+          <button type="button" class="btn btn-outline" (click)="useGeoMapLocation()" [disabled]="locationLoading">
+            {{ locationLoading ? 'Finding...' : 'My location' }}
+          </button>
+        </div>
+        <div #geoMap class="geo-map" aria-label="Registration address map"></div>
+        <div class="map-selected" *ngIf="geoLocation">
+          {{ geoLocation.latitude | number: '1.5-5' }}, {{ geoLocation.longitude | number: '1.5-5' }}
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,74 @@
+<section class="confirmation-page">
+  <div class="confirmation-panel" [class.failed]="status === 'failed'">
+    <h1>{{ message }}</h1>
+    <p *ngIf="status === 'success'">Your payment was completed successfully.</p>
+    <p *ngIf="status === 'failed'">The payment could not be completed. Please try again from cart.</p>
+    <p *ngIf="status === 'pending'">Waiting for backend confirmation.</p>
+
+    <dl *ngIf="confirmation">
+      <div>
+        <dt>Order ID</dt>
+        <dd>{{ confirmation.orderId }}</dd>
+      </div>
+      <div>
+        <dt>Transaction</dt>
+        <dd>{{ confirmation.transactionId }}</dd>
+      </div>
+      <div>
+        <dt>Amount</dt>
+        <dd>${{ confirmation.amount }}</dd>
+      </div>
+    </dl>
+
+    <section class="invoice" *ngIf="order">
+      <div class="invoice-heading">
+        <h2>Bill Details</h2>
+        <button class="btn btn-outline" (click)="downloadInvoice()">Download invoice</button>
+      </div>
+
+      <div class="product-lines">
+        <article *ngFor="let item of order.items">
+          <img [src]="item.productImage || 'assets/placeholder.png'" [alt]="item.productName" />
+          <div>
+            <h3>{{ item.productName }}</h3>
+            <p>{{ item.sellerName }} | Qty {{ item.quantity }} | ${{ item.unitPrice }}</p>
+          </div>
+          <strong>${{ item.lineTotal }}</strong>
+        </article>
+      </div>
+
+      <dl>
+        <div>
+          <dt>Subtotal</dt>
+          <dd>${{ order.bill.subtotal }}</dd>
+        </div>
+        <div>
+          <dt>Discount</dt>
+          <dd>${{ order.bill.discount }}</dd>
+        </div>
+        <div>
+          <dt>Tax amount</dt>
+          <dd>${{ order.bill.taxAmount }}</dd>
+        </div>
+        <div>
+          <dt>Total amount</dt>
+          <dd>${{ order.bill.totalAmount }}</dd>
+        </div>
+        <div>
+          <dt>Date and time</dt>
+          <dd>{{ order.purchasedAt | date: 'medium' }}</dd>
+        </div>
+        <div>
+          <dt>Courier</dt>
+          <dd><a [href]="order.courier.homePageUrl" target="_blank" rel="noreferrer">{{ order.courier.serviceName }}</a></dd>
+        </div>
+        <div>
+          <dt>Tracking ID</dt>
+          <dd>{{ order.courier.trackingId }}</dd>
+        </div>
+      </dl>
+    </section>
+
+    <a routerLink="/products" class="btn btn-primary">Back to products</a>
+  </div>
+</section>

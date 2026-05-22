@@ -1,0 +1,21 @@
+<div class="confirm-dialog-backdrop" *ngIf="isVisible" (click)="cancel()">
+  <div class="confirm-dialog" *ngIf="dialogData" @fadeInOut (click)="$event.stopPropagation()">
+    <div class="dialog-header">
+      <span class="dialog-icon">{{ getDialogIcon() }}</span>
+      <h2>{{ dialogData.title }}</h2>
+    </div>
+
+    <div class="dialog-content">
+      <p>{{ dialogData.message }}</p>
+    </div>
+
+    <div class="dialog-actions">
+      <button class="btn btn-outline" (click)="cancel()">
+        {{ getCancelButtonText() }}
+      </button>
+      <button class="btn btn-primary" (click)="confirm()">
+        {{ getConfirmButtonText() }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,73 @@
+<section class="admin-page">
+  <div class="page-header">
+    <h1>Admin Panel</h1>
+    <p>Search or filter listed users, product sellers, and products. Remove or approve records from here.</p>
+  </div>
+
+  <input class="search" [(ngModel)]="search" placeholder="Search users, sellers, products, categories..." />
+  <p class="message" *ngIf="message">{{ message }}</p>
+
+  <section class="whatsapp-settings">
+    <div>
+      <h2>WhatsApp Alerts</h2>
+      <p>Send admin messages when a new product seller or product is added.</p>
+    </div>
+    <label class="toggle-row">
+      <input type="checkbox" [(ngModel)]="whatsappSettings.enabled" />
+      Enabled
+    </label>
+    <label>
+      Admin WhatsApp number
+      <input [(ngModel)]="whatsappSettings.recipientNumber" placeholder="+919900001001" />
+    </label>
+    <div class="actions">
+      <button class="btn btn-primary btn-sm" (click)="saveWhatsAppSettings()">Save</button>
+      <button class="btn btn-outline btn-sm" (click)="openWhatsAppTest()">Test</button>
+    </div>
+  </section>
+
+  <div class="admin-grid">
+    <section class="admin-section">
+      <h2>Users</h2>
+      <article *ngFor="let record of filteredUsers">
+        <div>
+          <strong>{{ record.name }}</strong>
+          <p>{{ record.email }} | {{ record.role }} | {{ record.status }}</p>
+        </div>
+        <div class="actions">
+          <button class="btn btn-sm btn-danger" (click)="removeUser(record)" [disabled]="record.role === 'admin'">Remove</button>
+        </div>
+      </article>
+    </section>
+
+    <section class="admin-section">
+      <h2>Product Sellers</h2>
+      <article *ngFor="let record of filteredSellers">
+        <div>
+          <strong>{{ record.name }}</strong>
+          <p>{{ record.email }} | {{ record.status }}</p>
+        </div>
+        <div class="actions">
+          <button *ngIf="record.status === 'pending'" class="btn btn-sm btn-primary" (click)="approveSeller(record, 'approve')">Approve</button>
+          <button *ngIf="record.status === 'pending'" class="btn btn-sm btn-outline" (click)="approveSeller(record, 'reject')">Reject</button>
+          <button class="btn btn-sm btn-danger" (click)="removeUser(record)">Remove</button>
+        </div>
+      </article>
+    </section>
+
+    <section class="admin-section">
+      <h2>Products</h2>
+      <article *ngFor="let product of filteredProducts">
+        <div>
+          <strong>{{ product.name }}</strong>
+          <p>{{ product.sellerName }} | {{ product.category }} | ${{ product.price }} | {{ product.status || 'approved' }}</p>
+        </div>
+        <div class="actions">
+          <button *ngIf="product.status === 'pending'" class="btn btn-sm btn-primary" (click)="approveProduct(product, 'approve')">Approve</button>
+          <button *ngIf="product.status === 'pending'" class="btn btn-sm btn-outline" (click)="approveProduct(product, 'reject')">Reject</button>
+          <button class="btn btn-sm btn-danger" (click)="removeProduct(product)">Remove</button>
+        </div>
+      </article>
+    </section>
+  </div>
+</section>

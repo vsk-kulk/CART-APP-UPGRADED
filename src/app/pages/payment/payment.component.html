@@ -1,0 +1,14 @@
+<section class="payment-page">
+  <div class="payment-panel">
+    <h1>Payment</h1>
+    <p>The button calls the Spring Boot payment API. The backend returns the Stripe payment page URL.</p>
+    <div class="amount-row">
+      <span>Amount</span>
+      <strong>${{ amount }}</strong>
+    </div>
+    <button class="btn btn-primary" (click)="continuePayment()" [disabled]="loading || amount <= 0">
+      {{ loading ? 'Opening Stripe...' : 'Continue payment' }}
+    </button>
+    <p class="message" *ngIf="message">{{ message }}</p>
+  </div>
+</section>

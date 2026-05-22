@@ -1,0 +1,91 @@
+.confirm-dialog-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  backdrop-filter: blur(4px);
+}
+
+.confirm-dialog {
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  padding: 2rem;
+  max-width: 400px;
+  width: 90%;
+  animation: slideUp 0.3s ease-out;
+
+  .dialog-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+
+    .dialog-icon {
+      font-size: 2rem;
+      line-height: 1;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 1.25rem;
+    }
+  }
+
+  .dialog-content {
+    margin-bottom: 2rem;
+
+    p {
+      margin: 0;
+      color: var(--gray-600);
+      line-height: 1.6;
+    }
+  }
+
+  .dialog-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+
+    .btn {
+      flex: 1;
+
+      &:first-child {
+        flex: 0 1 auto;
+        min-width: 100px;
+      }
+    }
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 480px) {
+  .confirm-dialog {
+    padding: 1.5rem;
+    width: 95%;
+
+    .dialog-actions {
+      flex-direction: column-reverse;
+
+      .btn {
+        width: 100%;
+      }
+    }
+  }
+}

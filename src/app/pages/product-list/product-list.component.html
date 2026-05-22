@@ -1,0 +1,85 @@
+<div class="product-list-container">
+  <div class="product-page-header">
+    <div>
+      <h1>Products</h1>
+      <p>Browse all category highlights. Login is required only when you add items to cart or purchase.</p>
+    </div>
+  </div>
+
+  <div class="category-highlights">
+    <button
+      *ngFor="let cat of categories"
+      class="category-chip"
+      [class.active]="selectedCategory === cat"
+      (click)="selectCategory(cat)"
+    >
+      {{ cat }}
+    </button>
+  </div>
+
+  <div class="filters">
+    <input
+      type="text"
+      [(ngModel)]="searchQuery"
+      (input)="filterProducts()"
+      placeholder="Search products..."
+      class="search-input"
+    />
+    <select [(ngModel)]="selectedCategory" (change)="filterProducts()" class="category-filter">
+      <option value="">All Categories</option>
+      <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+    </select>
+    <select [(ngModel)]="selectedSellerId" (change)="filterProducts()" class="sort-filter">
+      <option value="">All Sellers</option>
+      <option *ngFor="let seller of sellers" [value]="seller.id">{{ seller.name }}</option>
+    </select>
+    <input
+      type="number"
+      [(ngModel)]="minPrice"
+      (input)="filterProducts()"
+      placeholder="Min price"
+      class="price-filter"
+    />
+    <input
+      type="number"
+      [(ngModel)]="maxPrice"
+      (input)="filterProducts()"
+      placeholder="Max price"
+      class="price-filter"
+    />
+    <select [(ngModel)]="sortBy" (change)="filterProducts()" class="sort-filter">
+      <option value="">Sort By</option>
+      <option value="price-low">Price: Low to High</option>
+      <option value="price-high">Price: High to Low</option>
+      <option value="newest">Newest First</option>
+      <option value="rating">Rating</option>
+    </select>
+  </div>
+
+  <p class="status-message" *ngIf="statusMessage">{{ statusMessage }}</p>
+
+  <div class="products-grid">
+    <div *ngFor="let product of filteredProducts" class="product-card">
+      <img [src]="product.image" [alt]="product.name" class="product-image" />
+      <div class="product-info">
+        <div class="product-title-row">
+          <h3>{{ product.name }}</h3>
+          <span class="stock" [class.pending]="product.status === 'pending'">
+            {{ product.status || 'approved' }}
+          </span>
+        </div>
+        <p class="description">{{ product.description }}</p>
+        <div class="product-meta">
+          <span class="price">${{ product.price }}</span>
+          <span class="rating">Star {{ product.rating }} ({{ product.reviews }})</span>
+          <span class="rating">Stock {{ product.stock }}</span>
+        </div>
+        <div class="seller-name">Seller: {{ product.sellerName }}</div>
+        <div class="product-actions">
+          <a [routerLink]="['/products', product.id]" class="details-link">Details</a>
+          <button (click)="addToCart(product)" class="add-to-cart-btn">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

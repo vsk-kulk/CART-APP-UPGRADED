@@ -1,0 +1,61 @@
+<section class="product-detail-page">
+  <a routerLink="/products" class="back-link">Back to products</a>
+
+  <div class="loading" *ngIf="isLoading">
+    <span class="spinner"></span>
+    <span>Loading product</span>
+  </div>
+
+  <p class="message" *ngIf="message">{{ message }}</p>
+
+  <article class="product-detail" *ngIf="!isLoading && product">
+    <div class="image-wrap">
+      <img [src]="product.image" [alt]="product.name" />
+    </div>
+
+    <div class="product-copy">
+      <div class="title-row">
+        <div>
+          <p class="category">{{ product.category }}</p>
+          <h1>{{ product.name }}</h1>
+        </div>
+        <span class="status" [class.pending]="product.status === 'pending'">
+          {{ product.status || 'approved' }}
+        </span>
+      </div>
+
+      <p class="description">{{ product.description }}</p>
+
+      <div class="metrics">
+        <div>
+          <span>Price</span>
+          <strong>${{ product.price }}</strong>
+        </div>
+        <div>
+          <span>Rating</span>
+          <strong>{{ product.rating }} / 5</strong>
+        </div>
+        <div>
+          <span>Reviews</span>
+          <strong>{{ product.reviews }}</strong>
+        </div>
+        <div>
+          <span>Stock</span>
+          <strong>{{ product.stock }}</strong>
+        </div>
+      </div>
+
+      <div class="seller">
+        <span>Seller</span>
+        <strong>{{ product.sellerName }}</strong>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-primary" (click)="addToCart()" [disabled]="product.stock <= 0">
+          {{ product.stock <= 0 ? 'Out of Stock' : 'Add to Cart' }}
+        </button>
+        <a routerLink="/cart" class="btn btn-outline">Go to Cart</a>
+      </div>
+    </div>
+  </article>
+</section>

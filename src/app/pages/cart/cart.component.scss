@@ -1,0 +1,140 @@
+.cart-page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 28px;
+}
+
+.page-header h1,
+.empty h2,
+.summary h2,
+.cart-item h2 {
+  font-family: inherit;
+}
+
+.message {
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  border-radius: 6px;
+  padding: 10px 12px;
+}
+
+.empty {
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: 8px;
+  padding: 28px;
+}
+
+.cart-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 20px;
+  align-items: start;
+}
+
+.cart-items {
+  display: grid;
+  gap: 12px;
+}
+
+.cart-item,
+.summary {
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.cart-item {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr) auto auto auto;
+  gap: 14px;
+  align-items: center;
+
+  img {
+    width: 88px;
+    height: 72px;
+    object-fit: cover;
+    border-radius: 6px;
+  }
+
+  h2 {
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+}
+
+.quantity {
+  display: grid;
+  grid-template-columns: 34px 34px 34px;
+  align-items: center;
+  text-align: center;
+
+  button {
+    height: 34px;
+    border: 1px solid var(--gray-300);
+    background: white;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+}
+
+.summary {
+  display: grid;
+  gap: 14px;
+  position: sticky;
+  top: 92px;
+}
+
+.summary-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+}
+
+.purchase-list {
+  margin-top: 24px;
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: 8px;
+  padding: 18px;
+  display: grid;
+  gap: 14px;
+}
+
+.purchase-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) 220px;
+  gap: 14px;
+  border: 1px solid var(--gray-200);
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.purchase-card.archived {
+  background: var(--gray-100);
+}
+
+.purchase-card h3,
+.purchase-card p {
+  margin: 0 0 6px;
+}
+
+.purchase-items,
+.purchase-actions {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+}
+
+@media (max-width: 860px) {
+  .cart-layout,
+  .cart-item,
+  .purchase-card {
+    grid-template-columns: 1fr;
+  }
+
+  .summary {
+    position: static;
+  }
+}

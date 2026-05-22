@@ -1,0 +1,34 @@
+<section class="auth-page">
+  <div class="auth-panel">
+    <h1>Login</h1>
+    <p>User login and product seller login are separated by role, with registration links below.</p>
+
+    <div class="role-tabs">
+      <button [class.active]="selectedRole === 'user'" (click)="selectRole('user')">User Login</button>
+      <button [class.active]="selectedRole === 'seller'" (click)="selectRole('seller')">Product Seller Login</button>
+      <button [class.active]="selectedRole === 'admin'" (click)="selectRole('admin')">Admin Login</button>
+    </div>
+
+    <form (ngSubmit)="login()" class="auth-form">
+      <label>
+        Email
+        <input type="email" [(ngModel)]="email" name="email" required />
+      </label>
+      <label>
+        Password
+        <input type="password" [(ngModel)]="password" name="password" required />
+      </label>
+      <button type="submit" class="btn btn-primary" [disabled]="loading">
+        {{ loading ? 'Signing in...' : 'Login' }}
+      </button>
+    </form>
+
+    <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+    <p class="info">{{ infoMessage }}</p>
+
+    <div class="register-links">
+      <a routerLink="/register" [queryParams]="{ role: 'user' }">New user form</a>
+      <a routerLink="/register" [queryParams]="{ role: 'seller' }">Product seller form</a>
+    </div>
+  </div>
+</section>

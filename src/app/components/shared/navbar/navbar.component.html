@@ -1,0 +1,39 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <div class="navbar-brand">
+      <a [routerLink]="isAdmin ? '/admin' : '/products'" class="brand-logo">
+        <span class="brand-name">Sayli n Hrudhu Enterprises</span>
+      </a>
+    </div>
+
+    <div class="navbar-menu" [class.active]="menuOpen">
+      <a *ngIf="!isAdmin && !isSeller" routerLink="/products" class="nav-link" (click)="closeMenu()">Products</a>
+
+      <ng-container *ngIf="currentUser">
+        <a *ngIf="currentUser.role === 'user'" routerLink="/cart" class="nav-link cart-link" (click)="closeMenu()">
+          Cart
+          <span class="badge" *ngIf="cartCount > 0">{{ cartCount }}</span>
+        </a>
+
+        <a *ngIf="isSeller" routerLink="/seller" class="nav-link" (click)="closeMenu()">Seller Dashboard</a>
+
+        <a *ngIf="isAdmin" routerLink="/admin" class="nav-link admin-link" (click)="closeMenu()">Admin Panel</a>
+
+        <div class="nav-user">
+          <span class="user-name">{{ currentUser.name }}</span>
+          <button class="btn btn-sm btn-outline" (click)="logout()">Logout</button>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="!currentUser">
+        <a routerLink="/login" class="nav-link" (click)="closeMenu()">Login</a>
+      </ng-container>
+    </div>
+
+    <button class="navbar-toggle" (click)="toggleMenu()" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</nav>

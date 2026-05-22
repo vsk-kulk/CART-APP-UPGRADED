@@ -1,0 +1,86 @@
+<section class="cart-page">
+  <div class="page-header">
+    <h1>Cart</h1>
+    <p>Your cart is loaded from the backend API when available and remains available after relogin.</p>
+  </div>
+
+  <p class="message" *ngIf="message">{{ message }}</p>
+
+  <div class="empty" *ngIf="items.length === 0">
+    <h2>No products in cart</h2>
+    <a routerLink="/products" class="btn btn-primary">Browse products</a>
+  </div>
+
+  <div class="cart-layout" *ngIf="items.length > 0">
+    <div class="cart-items">
+      <article class="cart-item" *ngFor="let item of items">
+        <img [src]="getProduct(item.productId)?.image || 'assets/placeholder.png'" [alt]="getProduct(item.productId)?.name || item.productId" />
+        <div>
+          <h2>{{ getProduct(item.productId)?.name || item.productId }}</h2>
+          <p>{{ getProduct(item.productId)?.sellerName || 'Backend product' }}</p>
+          <strong>${{ getProduct(item.productId)?.price || 0 }}</strong>
+        </div>
+        <div class="quantity">
+          <button (click)="changeQuantity(item, item.quantity - 1)" [disabled]="item.quantity <= 1">-</button>
+          <span>{{ item.quantity }}</span>
+          <button (click)="changeQuantity(item, item.quantity + 1)">+</button>
+        </div>
+        <button class="btn btn-outline btn-sm" (click)="addFavorite(item)">Favorite</button>
+        <button class="btn btn-danger btn-sm" (click)="remove(item)">Remove</button>
+      </article>
+    </div>
+
+    <aside class="summary">
+      <h2>Purchase Summary</h2>
+      <div class="summary-line">
+        <span>Total</span>
+        <strong>${{ getTotal() }}</strong>
+      </div>
+      <button class="btn btn-outline" (click)="saveCart()">Save Cart</button>
+      <button class="btn btn-primary" (click)="continuePayment()">Continue payment</button>
+    </aside>
+  </div>
+
+  <section class="purchase-list">
+    <h2>Purchased Products</h2>
+    <article class="purchase-card" *ngFor="let order of purchaseOrders">
+      <div>
+        <h3>{{ order.id }}</h3>
+        <p>{{ order.purchasedAt | date: 'medium' }} | Status {{ order.status }}</p>
+        <p *ngIf="order.notification">{{ order.notification }}</p>
+        <p *ngIf="order.cancellationReason">
+          Seller cancelled this request. Seller number {{ order.items[0].sellerPhone }}. Reason: {{ order.cancellationReason }}
+        </p>
+      </div>
+      <div class="purchase-items">
+        <div *ngFor="let item of order.items">
+          {{ item.productName }} x {{ item.quantity }} | Seller {{ item.sellerName }}
+        </div>
+      </div>
+      <div class="purchase-actions">
+        <strong>${{ order.bill.totalAmount }}</strong>
+        <a [href]="order.courier.homePageUrl" target="_blank" rel="noreferrer">{{ order.courier.serviceName }}</a>
+        <span>{{ order.courier.trackingId }}</span>
+        <button class="btn btn-outline btn-sm" (click)="downloadInvoice(order)">Invoice</button>
+        <button class="btn btn-primary btn-sm" (click)="archiveReceivedOrder(order)" *ngIf="order.status === 'paid'">
+          Received & archive
+        </button>
+      </div>
+    </article>
+    <p *ngIf="purchaseOrders.length === 0">No purchased products yet.</p>
+  </section>
+
+  <section class="purchase-list">
+    <h2>User Archive</h2>
+    <article class="purchase-card archived" *ngFor="let order of archivedPurchaseOrders">
+      <div>
+        <h3>{{ order.id }}</h3>
+        <p>Status {{ order.status }} | Archived {{ order.archivedAt | date: 'medium' }}</p>
+      </div>
+      <div class="purchase-items">
+        <div *ngFor="let item of order.items">{{ item.productName }} x {{ item.quantity }}</div>
+      </div>
+    </article>
+    <p *ngIf="archivedPurchaseOrders.length === 0">No archived purchases.</p>
+  </section>
+</section>

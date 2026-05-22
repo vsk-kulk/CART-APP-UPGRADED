@@ -1,0 +1,160 @@
+.register-page {
+  min-height: 70vh;
+  display: grid;
+  place-items: center;
+  padding: 32px;
+}
+
+.register-panel {
+  width: min(1180px, 100%);
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: 8px;
+  padding: 28px;
+  box-shadow: var(--shadow-md);
+}
+
+.register-content {
+  display: grid;
+  grid-template-columns: minmax(0, 620px) minmax(320px, 1fr);
+  gap: 28px;
+  align-items: center;
+}
+
+.register-form-panel {
+  min-width: 0;
+}
+
+h1 {
+  font-family: inherit;
+  font-size: 30px;
+}
+
+.role-tabs {
+  display: flex;
+  gap: 10px;
+  margin: 18px 0;
+}
+
+.role-tabs button {
+  border: 1px solid var(--gray-300);
+  background: white;
+  border-radius: 6px;
+  padding: 10px 12px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.role-tabs button.active {
+  background: var(--primary);
+  color: white;
+}
+
+.register-form {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+label {
+  display: grid;
+  gap: 6px;
+  font-weight: 700;
+}
+
+.address-section,
+.aadhaar-section {
+  display: grid;
+  gap: 14px;
+  border: 1px solid var(--gray-200);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.section-heading h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.location-note,
+.inline-message {
+  margin: 0;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+@media (max-width: 560px) {
+  .section-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+
+.form-message {
+  margin: 0 0 14px;
+  font-weight: 700;
+}
+
+.map-panel {
+  position: sticky;
+  top: 96px;
+  align-self: center;
+  display: grid;
+  gap: 12px;
+}
+
+.map-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.map-header h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.geo-map {
+  width: 100%;
+  min-height: 430px;
+  border: 1px solid var(--gray-200);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--gray-100);
+}
+
+.map-selected {
+  color: var(--gray-600);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.success {
+  color: var(--success);
+}
+
+.error {
+  color: var(--danger);
+}
+
+@media (max-width: 960px) {
+  .register-content {
+    grid-template-columns: 1fr;
+  }
+
+  .map-panel {
+    position: static;
+  }
+
+  .geo-map {
+    min-height: 340px;
+  }
+}
